@@ -1,0 +1,5 @@
+relationship 40674ce8-cbfd-4736-b3a6-f0a495264201
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Inventory and Supply Chain Dataset'.Date
+	toColumn: LocalDateTable_1c1eeeee-9001-4c90-a8ec-f5b11ef6b137.Date
+

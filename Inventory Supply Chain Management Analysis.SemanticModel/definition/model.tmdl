@@ -1,0 +1,20 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Inventory and Supply Chain Dataset"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'Inventory and Supply Chain Dataset'
+ref table DateTableTemplate_880a111b-edb1-4ca1-8e21-fd55ad2ae348
+ref table LocalDateTable_1c1eeeee-9001-4c90-a8ec-f5b11ef6b137
+
+ref cultureInfo en-US
+

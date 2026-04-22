@@ -1,0 +1,175 @@
+table 'Inventory and Supply Chain Dataset'
+	lineageTag: ced2edca-d4db-4949-9c3f-536aa7bb5f88
+
+	measure 'Warehouse Utilization' = DIVIDE(SUM('Inventory and Supply Chain Dataset'[Inventory Level]),SUM('Inventory and Supply Chain Dataset'[Warehouse Capacity]))*100
+		lineageTag: d79019c9-0cde-4e8d-8da7-2c6e830a92ae
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Day sales of Inventory' = DIVIDE(SUM('Inventory and Supply Chain Dataset'[Inventory Level]),SUM('Inventory and Supply Chain Dataset'[Cost of Goods Sold]))*365
+		lineageTag: e21a344e-6839-4a9a-97f4-70e1e4a8084c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Inventory Turnover Ratio' = DIVIDE(SUM('Inventory and Supply Chain Dataset'[Cost of Goods Sold]),SUM('Inventory and Supply Chain Dataset'[Average Inventory]))
+		lineageTag: 74099f74-3acb-4215-a128-0bd42d83f59d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d67d6be9-258c-4932-aad5-565a659d4f46
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: 40674ce8-cbfd-4736-b3a6-f0a495264201
+			defaultHierarchy: LocalDateTable_1c1eeeee-9001-4c90-a8ec-f5b11ef6b137.'Date Hierarchy'
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Region
+		dataType: string
+		lineageTag: 71085e06-0d7c-42d6-9e0d-83978783edab
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 0c7872f3-aa13-4a90-9d62-694412f155b2
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Supplier
+		dataType: string
+		lineageTag: ea6a4c3c-577e-416a-b2a2-b8baa0f327c6
+		summarizeBy: none
+		sourceColumn: Supplier
+
+		annotation SummarizationSetBy = Automatic
+
+	column Warehouse
+		dataType: string
+		lineageTag: 93942149-36c3-4dd5-960d-fc7de92d847f
+		summarizeBy: none
+		sourceColumn: Warehouse
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Status'
+		dataType: string
+		lineageTag: 9d0e4465-eaa1-4986-a79c-ed7c62d73e8d
+		summarizeBy: none
+		sourceColumn: Order Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Units Sold'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6e5b253b-05f0-421d-9d7f-f05c8e3794f7
+		summarizeBy: sum
+		sourceColumn: Units Sold
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Inventory Level'
+		dataType: int64
+		formatString: 0
+		lineageTag: 76da83f7-4ae8-4b93-a2e5-15dfdf901a69
+		summarizeBy: sum
+		sourceColumn: Inventory Level
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Transportation Cost'
+		dataType: double
+		lineageTag: 58d42c08-3277-40ca-a9b9-dc1bd2f414c1
+		summarizeBy: sum
+		sourceColumn: Transportation Cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Order Accuracy'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 20818ed3-e9a8-464f-adb1-0c2f9887d3a8
+		summarizeBy: none
+		sourceColumn: Order Accuracy
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Lead Time (Days)'
+		dataType: int64
+		formatString: 0
+		lineageTag: f66bfceb-3ce4-4e4c-b67b-601fae8d713d
+		summarizeBy: sum
+		sourceColumn: Lead Time (Days)
+
+		annotation SummarizationSetBy = Automatic
+
+	column Backorder
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 09483638-da4a-4348-8e0e-a3d6d4183456
+		summarizeBy: none
+		sourceColumn: Backorder
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cost of Goods Sold'
+		dataType: double
+		lineageTag: cacb7cdc-89be-42b6-a149-9570a9019a59
+		summarizeBy: sum
+		sourceColumn: Cost of Goods Sold
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Average Inventory'
+		dataType: double
+		lineageTag: 9ca7dbcc-c769-48cc-91cc-fb6695198f76
+		summarizeBy: sum
+		sourceColumn: Average Inventory
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Warehouse Capacity'
+		dataType: int64
+		formatString: 0
+		lineageTag: da339703-ca11-4199-9b82-cc8f9c57de4e
+		summarizeBy: sum
+		sourceColumn: Warehouse Capacity
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Inventory and Supply Chain Dataset' = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Lenovo\Downloads\Inventory_SupplyChain_Dataset.csv"),[Delimiter=",", Columns=15, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type text}, {"Region", type text}, {"Category", type text}, {"Supplier", type text}, {"Warehouse", type text}, {"Order Status", type text}, {"Units Sold", Int64.Type}, {"Inventory Level", Int64.Type}, {"Transportation Cost", type number}, {"Order Accuracy", type logical}, {"Lead Time (Days)", Int64.Type}, {"Backorder", type logical}, {"Cost of Goods Sold (COGS)", type number}, {"Average Inventory", type number}, {"Warehouse Capacity", Int64.Type}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Cost of Goods Sold (COGS)", "Cost of Goods Sold"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

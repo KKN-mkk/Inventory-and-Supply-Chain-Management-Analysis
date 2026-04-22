@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Inventory Supply Chain Management Analysis"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "967aba19-9b00-4c95-8752-bbde1cd274d9"
+  }
+}
